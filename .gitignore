@@ -161,7 +161,7 @@ cython_debug/
 # Machine Learning / Data Science
 *.h5
 *.hdf5
-*.csv
+# *.csv
 *.tsv
 *.parquet
 *.feather

@@ -2,7 +2,8 @@
 
 # 数据设置
 data:
-  path: "data/raw/h_elsa_g3.dta"  # 原始数据文件路径
+  raw_data_path: "data/raw/h_elsa_g3.dta"  # 原始数据文件路径
+  processed_data_path: "data/processed" #可以直接用的数据的路径
   filters:
     min_waves: 8              # 最少波次数要求
     min_non_sparsity: 0.7     # 最小非稀疏度要求
