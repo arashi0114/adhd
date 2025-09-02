@@ -1,0 +1,40 @@
+# ADHD项目默认配置文件
+
+# 数据设置
+data:
+  path: "data/raw/h_elsa_g3.dta"  # 原始数据文件路径
+  filters:
+    min_waves: 8              # 最少波次数要求
+    min_non_sparsity: 0.7     # 最小非稀疏度要求
+  
+# 模型设置
+model:
+  task_type: "classification"   # 任务类型：classification 或 regression
+  input_dim: null              # 输入维度，将在运行时自动设置
+  hidden_dims: [128, 64, 32]   # 隐藏层维度列表
+  output_dim: 2                # 输出维度（分类任务为类别数，回归任务为1）
+  dropout: 0.3                 # Dropout率
+  activation: "relu"           # 激活函数类型
+
+# 训练设置
+train:
+  batch_size: 64              # 批次大小
+  learning_rate: 0.001        # 学习率
+  num_epochs: 100             # 训练轮数
+  device: "cuda"              # 训练设备：cuda 或 cpu
+  early_stopping:
+    patience: 15              # 早停耐心值
+    min_delta: 0.0001        # 最小改进阈值
+  
+# 数据预处理设置
+preprocessing:
+  perform_imputation: true      # 是否进行缺失值插补
+  perform_standardization: true # 是否进行标准化
+  handle_outliers: true         # 是否处理异常值
+  outlier_method: "iqr"        # 异常值检测方法
+
+# 输出设置
+output:
+  model_save_dir: "outputs/models"      # 模型保存目录
+  results_save_dir: "outputs/results"   # 结果保存目录
+  log_dir: "outputs/logs"               # 日志保存目录
