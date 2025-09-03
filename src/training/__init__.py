@@ -1,16 +1,9 @@
 """
 训练模块
-包含训练和评估功能
+包含深度学习训练功能
 """
-from .train import train_single_task, EarlyStopping, create_optimizer, create_scheduler, load_checkpoint
-from .evaluate import evaluate_single_task, compare_models
+from .train_dl import train_deep_learning_model
 
 __all__ = [
-    'train_single_task', 
-    'evaluate_single_task',
-    'EarlyStopping',
-    'create_optimizer',
-    'create_scheduler', 
-    'load_checkpoint',
-    'compare_models'
+    'train_deep_learning_model'
 ]

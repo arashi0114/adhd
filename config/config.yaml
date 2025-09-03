@@ -1,0 +1,255 @@
+# ADHD认知障碍预测实验配置
+# 根据实验指导简化的统一配置文件
+
+# 随机种子设置（确保可复现）
+random_seed: 42
+
+# 数据设置
+data:
+  # 数据目录（自动选择最新CSV文件）
+  data_dir: "data/cleaned"
+  
+  # 数据划分比例
+  train_ratio: 0.8
+  val_ratio: 0.1
+  test_ratio: 0.1
+  
+  # 数据质量要求
+  min_sample_completeness: 0.3  # 样本最小完整度
+  min_feature_completeness: 0.7  # 特征最小完整度
+
+# 数据预处理设置
+preprocessing:
+  # 多重插补
+  multiple_imputation:
+    enabled: true
+    n_imputations: 5  # 5重插补
+  
+  # 异常值处理
+  outlier_detection:
+    enabled: true
+    method: "iqr"  # "iqr", "z_score"
+    threshold: 1.5
+  
+  # 标准化
+  scaling:
+    enabled: true
+    method: "standard"  # "standard", "robust", "none"
+
+# 实验任务
+tasks:
+  classification:
+    enabled: true
+    name: "老年人群认知障碍早筛"
+    description: "二分类任务：预测是否会发生认知障碍"
+  
+  regression:
+    enabled: true
+    name: "认知障碍发病时间预测"
+    description: "回归任务：预测认知障碍发病时间"
+
+# 模型配置
+models:
+  # 深度学习模型
+  deep_learning:
+    # Transformer（适配表格数据）
+    transformer:
+      enabled: true
+      params:
+        d_model: 128
+        nhead: 8
+        num_layers: 3
+        dropout: 0.1
+    
+    # ResNet（残差网络）
+    resnet:
+      enabled: true
+      params:
+        block_sizes: [64, 128, 256]
+        num_blocks: [2, 2, 2]
+        dropout: 0.3
+    
+    # AlexNet（大型全连接）
+    alexnet:
+      enabled: true
+      params:
+        dropout: 0.5
+    
+    # MobileNet（深度可分离卷积概念）
+    mobilenet:
+      enabled: true
+      params:
+        width_multiplier: 1.0
+        dropout: 0.2
+    
+    # RNN/LSTM
+    rnn:
+      enabled: true
+      params:
+        hidden_size: 128
+        num_layers: 2
+        cell_type: "LSTM"  # "RNN", "LSTM", "GRU"
+        bidirectional: true
+        dropout: 0.3
+    
+    # 基础MLP
+    mlp:
+      enabled: true
+      params:
+        hidden_dims: [128, 64, 32]
+        dropout: 0.3
+        activation: "relu"
+
+  # 传统机器学习模型
+  traditional_ml:
+    # XGBoost
+    xgboost:
+      enabled: true
+      params:
+        n_estimators: 100
+        max_depth: 6
+        learning_rate: 0.1
+        random_state: 42
+    
+    # 支持向量机
+    svm:
+      enabled: true
+      params:
+        C: 1.0
+        kernel: "rbf"
+        random_state: 42
+    
+    # 随机森林
+    random_forest:
+      enabled: true
+      params:
+        n_estimators: 100
+        max_depth: null
+        random_state: 42
+    
+    # 线性回归/逻辑回归
+    linear:
+      enabled: true
+      params:
+        C: 1.0  # 分类任务
+        alpha: 1.0  # 回归任务
+        random_state: 42
+
+# 训练设置
+training:
+  # 深度学习训练参数
+  deep_learning:
+    batch_size: 64
+    num_epochs: 100
+    learning_rate: 0.001
+    device: "auto"  # "cuda", "cpu", "auto"
+    
+    # 早停
+    early_stopping:
+      patience: 15
+      min_delta: 0.0001
+    
+    # 学习率调度
+    lr_scheduler:
+      enabled: true
+      factor: 0.5
+      patience: 10
+
+# 评估设置
+evaluation:
+  # 基本评估指标
+  metrics:
+    classification:
+      - "accuracy"
+      - "precision"
+      - "recall"
+      - "f1_score"
+      - "roc_auc"
+      - "pr_auc"
+    
+    regression:
+      - "mse"
+      - "rmse"
+      - "mae"
+      - "r2_score"
+      - "mean_absolute_percentage_error"
+  
+  # 计算开销指标
+  performance_metrics:
+    - "training_time"
+    - "inference_time"
+    - "model_parameters"
+    - "flops"
+  
+  # 可视化
+  visualization:
+    enabled: true
+    save_plots: true
+    plot_formats: ["png"]
+    plots:
+      - "confusion_matrix"      # 分类
+      - "roc_curve"            # 分类
+      - "pr_curve"             # 分类
+      - "residuals"            # 回归
+      - "training_curves"      # 深度学习
+
+# 高级分析
+advanced_analysis:
+  # 十折交叉验证
+  cross_validation:
+    enabled: false  # 默认关闭（计算密集）
+    folds: 10
+  
+  # 统计分析
+  statistical_tests:
+    enabled: true
+    confidence_level: 0.95
+  
+  # 可解释性分析
+  interpretability:
+    # SHAP分析
+    shap:
+      enabled: false  # 默认关闭（需要额外安装）
+      max_display: 20
+    
+    # 特征重要性
+    feature_importance:
+      enabled: true
+
+# 输出设置
+output:
+  # 基础目录
+  base_dir: "outputs"
+  
+  # 自动生成时间戳目录
+  use_timestamp: true
+  
+  # 保存设置
+  save:
+    models: true
+    results: true
+    plots: true
+    logs: true
+  
+  # 目录结构
+  dirs:
+    models: "models"
+    results: "results"
+    plots: "plots"
+    logs: "logs"
+
+# 实验控制
+experiment:
+  # 实验名称
+  name: "ADHD_cognitive_prediction"
+  
+  # 并行训练（如果资源允许）
+  parallel_training: false
+  
+  # 中间结果保存
+  save_intermediate: true
+  
+  # 实验恢复
+  resume:
+    enabled: true
+    from_step: null  # null, "data", "training", "evaluation"
